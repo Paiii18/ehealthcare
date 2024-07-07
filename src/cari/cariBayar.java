@@ -4,45 +4,44 @@
  */
 package cari;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
 import tampilan.kamar;
-import tampilan.rekammedis;
+import tampilan.pembayaran;
 
 /**
  *
  * @author Asus
  */
-public class cariRekam extends javax.swing.JFrame {
+public class cariBayar extends javax.swing.JFrame {
 
-    private Connection conn = new koneksi().connect();
+    private final Connection conn = new koneksi().connect();
     private DefaultTableModel tabmode;
-    public kamar kamar = null;
-    
+    public pembayaran bayar = null;
 
     /**
-     * Creates new form cariRema
+     * Creates new form cariBayar
      */
-    public cariRekam() {
+    public cariBayar() {
         initComponents();
         datatable();
     }
 
     protected void datatable() {
-        Object[] Baris = {"ID Periksa", "Nama Dokter", "Nama Pasien", "Tanggal", "Diagnosis", "Gejala"};
+        Object[] Baris = {"ID Rekam Medis", "Nama Pasien", "Diagnosis", "Tanggal Masuk", "Nama Kamar", "Nama Dokter", "Nama Obat", "Harga Kamar", "Harga Obat"};
         tabmode = new DefaultTableModel(null, Baris);
-        tablerekam.setModel(tabmode);
+        tablebayar.setModel(tabmode);
 
-        String sql = "SELECT rekam_medis.id_rekammedis, dokter.nama_dokter, pasien.nama_pasien, rekam_medis.tanggal_periksa, rekam_medis.gejala, rekam_medis.diagnosis "
-                + "FROM rekam_medis "
-                + "INNER JOIN dokter ON rekam_medis.id_dokter = dokter.id_dokter "
-                + "INNER JOIN pasien ON rekam_medis.id_pasien = pasien.id_pasien";
+        // SQL query to join rekam_medis with dokter, pasien, obat, and kamar
+        String sql = "SELECT rm.id_rekammedis, ps.nama_pasien, rm.diagnosis, rm.tanggal_periksa, km.nama_kamar, dk.nama_dokter, ob.nama_obat, km.harga AS harga_kamar, ob.harga AS harga_obat "
+                   + "FROM rekam_medis rm "
+                   + "INNER JOIN dokter dk ON rm.id_dokter = dk.id_dokter "
+                   + "INNER JOIN pasien ps ON rm.id_pasien = ps.id_pasien "
+                   + "INNER JOIN kamar km ON rm.id_kamar = km.id_kamar "
+                   + "INNER JOIN obat ob ON rm.id_obat = ob.id_obat";
 
         try {
             Statement stat = conn.createStatement();
@@ -50,16 +49,17 @@ public class cariRekam extends javax.swing.JFrame {
             while (hasil.next()) {
                 String a = hasil.getString("id_rekammedis");
                 String b = hasil.getString("nama_pasien");
-                String c = hasil.getString("nama_dokter");
+                String c = hasil.getString("diagnosis");
                 String d = hasil.getString("tanggal_periksa");
-                String e = hasil.getString("diagnosis");
-                String f = hasil.getString("gejala");
+                String e = hasil.getString("nama_kamar");
+                String f = hasil.getString("nama_dokter");
+                String g = hasil.getString("nama_obat");
+                String h = hasil.getString("harga_kamar");
+                String i = hasil.getString("harga_obat");
 
-                String[] data = {a, b, c, d, e, f};
+                String[] data = {a, b, c, d, e, f, g, h, i};
                 tabmode.addRow(data);
             }
-            
-            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,11 +75,11 @@ public class cariRekam extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablerekam = new javax.swing.JTable();
+        tablebayar = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        tablerekam.setModel(new javax.swing.table.DefaultTableModel(
+        tablebayar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -90,12 +90,12 @@ public class cariRekam extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tablerekam.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablebayar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablerekamMouseClicked(evt);
+                tablebayarMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tablerekam);
+        jScrollPane1.setViewportView(tablebayar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -105,30 +105,40 @@ public class cariRekam extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tablerekamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablerekamMouseClicked
-        int selectedRow = tablerekam.rowAtPoint(evt.getPoint());
+    private void tablebayarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablebayarMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = tablebayar.rowAtPoint(evt.getPoint());
         if (selectedRow >= 0) {
-            kamar.namaPas = tablerekam.getValueAt(selectedRow, 1).toString();
-            kamar.namaDok = tablerekam.getValueAt(selectedRow, 2).toString();
-            kamar.diagnosis = tablerekam.getValueAt(selectedRow, 4).toString();
+            // Sesuaikan dengan indeks yang benar berdasarkan urutan kolom di 'datatable'
+            bayar.namaPas = tablebayar.getValueAt(selectedRow, 1).toString(); 
+            bayar.diagnosis = tablebayar.getValueAt(selectedRow, 2).toString();
 
             try {
-                String dateStr = tablerekam.getValueAt(selectedRow, 3).toString();
+                // Tanggal periksa dari kolom yang sesuai
+                String dateStr = tablebayar.getValueAt(selectedRow, 3).toString();
                 java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
-                kamar.tgl = date;
+                bayar.tanggalmasuk = date;
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            kamar.rekamTerpilih();
-            this.dispose();
+            bayar.namaKamar = tablebayar.getValueAt(selectedRow, 4).toString(); 
+            bayar.namaDok = tablebayar.getValueAt(selectedRow, 5).toString(); 
+            bayar.namaObat = tablebayar.getValueAt(selectedRow, 6).toString(); 
+            bayar.hargaKamar = tablebayar.getValueAt(selectedRow, 7).toString(); 
+            bayar.hargaObat = tablebayar.getValueAt(selectedRow, 8).toString(); 
+            bayar.bayarTerpilih();
+            this.dispose(); // Menutup jendela saat operasi selesai
         }
-    }//GEN-LAST:event_tablerekamMouseClicked
+    }//GEN-LAST:event_tablebayarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -147,27 +157,26 @@ public class cariRekam extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(cariRekam.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(cariBayar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(cariRekam.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(cariBayar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(cariRekam.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(cariBayar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(cariRekam.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(cariBayar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new cariRekam().setVisible(true);
+                new cariBayar().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tablerekam;
+    private javax.swing.JTable tablebayar;
     // End of variables declaration//GEN-END:variables
 }

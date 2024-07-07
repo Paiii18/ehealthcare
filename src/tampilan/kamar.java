@@ -54,11 +54,11 @@ public class kamar extends javax.swing.JFrame {
     }
 
     protected void datatable() {
-        Object[] Baris = {"Id Kamar", "Nama Pasien", "Diagnosis", "Nama Kamar", "Nama Dokter", "Tanggal Masuk"};
+        Object[] Baris = {"Id Kamar", "Nama Pasien", "Diagnosis", "Nama Kamar", "Nama Dokter", "Harga", "Tanggal Masuk"};
         tabmode = new DefaultTableModel(null, Baris);
         tablekamar.setModel(tabmode);
 
-        String sql = "SELECT kamar.id_kamar, pasien.nama_pasien, rekam_medis.diagnosis, kamar.nama_kamar, dokter.nama_dokter, kamar.tanggal "
+        String sql = "SELECT kamar.id_kamar, pasien.nama_pasien, rekam_medis.diagnosis, kamar.nama_kamar, dokter.nama_dokter, kamar.harga,kamar.tanggal "
                 + "FROM rekam_medis "
                 + "JOIN kamar ON rekam_medis.id_rekammedis = kamar.id_kamar "
                 + "JOIN pasien ON rekam_medis.id_pasien = pasien.id_pasien "
@@ -73,9 +73,10 @@ public class kamar extends javax.swing.JFrame {
                 String c = hasil.getString("diagnosis");
                 String d = hasil.getString("nama_kamar");
                 String e = hasil.getString("nama_dokter");
-                String f = hasil.getString("tanggal");
+                String f = hasil.getString("harga");
+                String g = hasil.getString("tanggal");
 
-                String[] data = {a, b, c, d, e, f};
+                String[] data = {a, b, c, d, e, f, g};
                 tabmode.addRow(data);
             }
         } catch (SQLException e) {
@@ -120,6 +121,8 @@ public class kamar extends javax.swing.JFrame {
         btnkembali = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         tidkamar = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        tharga = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -199,6 +202,8 @@ public class kamar extends javax.swing.JFrame {
 
         jLabel6.setText("Id Kamar");
 
+        jLabel7.setText("Harga Kamar");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -216,23 +221,31 @@ public class kamar extends javax.swing.JFrame {
                                 .addGap(26, 26, 26)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbkamar, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tnamadokter, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tdiagnosis, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnsimpan)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnubah)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnhapus)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnkembali))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                             .addComponent(tidkamar, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(tnamapasien, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))
                                         .addGap(18, 18, 18)
-                                        .addComponent(btncari)))))
-                        .addContainerGap(135, Short.MAX_VALUE))
+                                        .addComponent(btncari))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(btnsimpan)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(btnubah))
+                                            .addComponent(tnamadokter, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(btnhapus)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(btnkembali))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel7)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(tharga, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                        .addContainerGap(60, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -273,7 +286,9 @@ public class kamar extends javax.swing.JFrame {
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(tnamadokter, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tnamadokter, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(tharga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnsimpan)
@@ -297,14 +312,16 @@ public class kamar extends javax.swing.JFrame {
         try {
             String idKamar = tidkamar.getText();
             String namaKamar = cbkamar.getSelectedItem().toString();
+            String harga = tharga.getText();
             java.util.Date tanggalMasuk = tanggal.getDate();
             java.sql.Date sqlDate = new java.sql.Date(tanggalMasuk.getTime());
 
-            String sql = "UPDATE kamar SET nama_kamar=?, tanggal=? WHERE id_kamar=?";
+            String sql = "UPDATE kamar SET nama_kamar=?, harga=?,tanggal=? WHERE id_kamar=?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, namaKamar);
-            pstmt.setDate(2, sqlDate);
-            pstmt.setString(3, idKamar);
+            pstmt.setString(2, harga);
+            pstmt.setDate(3, sqlDate);
+            pstmt.setString(4, idKamar);
 
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data berhasil diubah");
@@ -323,13 +340,15 @@ public class kamar extends javax.swing.JFrame {
         String diagnosis = tablekamar.getValueAt(row, 2).toString();
         String namaKamar = tablekamar.getValueAt(row, 3).toString();
         String namaDokter = tablekamar.getValueAt(row, 4).toString();
-        String tanggalMasuk = tablekamar.getValueAt(row, 5).toString();
+        String harga = tablekamar.getValueAt(row, 5).toString();
+        String tanggalMasuk = tablekamar.getValueAt(row, 6).toString();
 
         tidkamar.setText(idKamar);
         tnamapasien.setText(namaPasien);
         tdiagnosis.setText(diagnosis);
         cbkamar.setSelectedItem(namaKamar);
         tnamadokter.setText(namaDokter);
+        tharga.setText(harga);
         try {
             java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(tanggalMasuk);
             tanggal.setDate(date);
@@ -359,14 +378,16 @@ public class kamar extends javax.swing.JFrame {
         try {
             String idKamar = tidkamar.getText();
             String namaKamar = cbkamar.getSelectedItem().toString();
+            String harga = tharga.getText();
             java.util.Date tanggalMasuk = tanggal.getDate();
             java.sql.Date sqlDate = new java.sql.Date(tanggalMasuk.getTime());
 
-            String sql = "INSERT INTO kamar (id_kamar, nama_kamar, tanggal) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO kamar (id_kamar, nama_kamar, harga,tanggal) VALUES (?,?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, idKamar);
             pstmt.setString(2, namaKamar);
-            pstmt.setDate(3, sqlDate);
+            pstmt.setString(3, harga);
+            pstmt.setDate(4, sqlDate);
 
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
@@ -443,10 +464,12 @@ public class kamar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablekamar;
     private com.toedter.calendar.JDateChooser tanggal;
     private javax.swing.JTextField tdiagnosis;
+    private javax.swing.JTextField tharga;
     private javax.swing.JTextField tidkamar;
     private javax.swing.JTextField tnamadokter;
     private javax.swing.JTextField tnamapasien;

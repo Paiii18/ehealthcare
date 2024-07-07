@@ -76,6 +76,7 @@ public class rekammedis extends javax.swing.JFrame {
         tidrekam.setText("");
         tiddokter.setText("");
         tidobat.setText("");
+        tidpasien.setText("");
         tnamadokter.setText("");
         tnama_obat.setText("");
         tglperiksa.setDate(null);
@@ -85,11 +86,11 @@ public class rekammedis extends javax.swing.JFrame {
     }
 
     protected void datatable() {
-        Object[] Baris = {"ID Periksa", "Nama Dokter", "Nama Pasien", "Tanggal", "Gejala", "Diagnosis"};
+        Object[] Baris = {"ID Periksa", "Nama Dokter", "Nama Pasien", "Tanggal", "Gejala", "Diagnosis", "tindakan"};
         DefaultTableModel tabmode = new DefaultTableModel(null, Baris);
         tablepemeriksaan.setModel(tabmode);
 
-        String sql = "SELECT rekam_medis.id_rekammedis, dokter.nama_dokter, pasien.nama_pasien, rekam_medis.tanggal_periksa, rekam_medis.gejala, rekam_medis.diagnosis "
+        String sql = "SELECT rekam_medis.id_rekammedis, dokter.nama_dokter, pasien.nama_pasien, rekam_medis.tanggal_periksa, rekam_medis.gejala, rekam_medis.diagnosis, rekam_medis.tindakan "
                 + "FROM rekam_medis "
                 + "JOIN dokter ON rekam_medis.id_dokter = dokter.id_dokter "
                 + "JOIN pasien ON rekam_medis.id_pasien = pasien.id_pasien";
@@ -104,8 +105,9 @@ public class rekammedis extends javax.swing.JFrame {
                 String d = hasil.getString("tanggal_periksa");
                 String e = hasil.getString("gejala");
                 String f = hasil.getString("diagnosis");
+                String g = hasil.getString("tindakan");
 
-                String[] data = {a, b, c, d, e, f};
+                String[] data = {a, b, c, d, e, f, g};
                 tabmode.addRow(data);
             }
         } catch (SQLException e) {
@@ -173,6 +175,8 @@ public class rekammedis extends javax.swing.JFrame {
         tidpasien = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         tidobat = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        cbtindakan = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -289,6 +293,10 @@ public class rekammedis extends javax.swing.JFrame {
 
         jLabel9.setText("Id Pasien");
 
+        jLabel11.setText("Tindakan");
+
+        cbtindakan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Rawat Inap", "Boleh Pulang", "Rawat Jalan" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -349,6 +357,10 @@ public class rekammedis extends javax.swing.JFrame {
                                 .addComponent(tnamadokter, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(219, 219, 219)
+                                .addComponent(jLabel7)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
@@ -358,14 +370,14 @@ public class rekammedis extends javax.swing.JFrame {
                                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(tglperiksa, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(35, 35, 35)
-                                        .addComponent(tdiagnosis, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(20, 20, 20))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(219, 219, 219)
-                                .addComponent(jLabel7)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(tdiagnosis)
+                                            .addComponent(cbtindakan, 0, 242, Short.MAX_VALUE))))
+                                .addGap(20, 20, 20))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -383,7 +395,11 @@ public class rekammedis extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(tdiagnosis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8)))
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(cbtindakan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -441,10 +457,11 @@ public class rekammedis extends javax.swing.JFrame {
             String idObat = tidobat.getText();
             String gejala = tgejala.getText();
             String diagnosis = tdiagnosis.getText();
+            String tindakan = cbtindakan.getSelectedItem().toString();
             java.util.Date tanggalPeriksa = tglperiksa.getDate();
             java.sql.Date sqlDate = new java.sql.Date(tanggalPeriksa.getTime());
 
-            String sql = "INSERT INTO rekam_medis (id_rekammedis, id_dokter, id_pasien, id_obat, gejala, diagnosis, tanggal_periksa) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO rekam_medis (id_rekammedis, id_dokter, id_pasien, id_obat, gejala, diagnosis, tindakan, tanggal_periksa) VALUES (?,?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, idRekam);
             pstmt.setString(2, idDokter);
@@ -452,7 +469,8 @@ public class rekammedis extends javax.swing.JFrame {
             pstmt.setString(4, idObat);
             pstmt.setString(5, gejala);
             pstmt.setString(6, diagnosis);
-            pstmt.setDate(7, sqlDate);
+            pstmt.setString(7, tindakan);
+            pstmt.setDate(8, sqlDate);
 //      
             pstmt.executeUpdate();
             pstmt.close();
@@ -473,18 +491,20 @@ public class rekammedis extends javax.swing.JFrame {
             String idObat = tidobat.getText();
             String gejala = tgejala.getText();
             String diagnosis = tdiagnosis.getText();
+            String tindakan = cbtindakan.getSelectedItem().toString();
             java.util.Date tanggalPeriksa = tglperiksa.getDate();
             java.sql.Date sqlDate = new java.sql.Date(tanggalPeriksa.getTime());
 
-            String sql = "UPDATE rekam_medis SET id_dokter= ?, id_pasien= ?, id_obat= ?,  gejala = ?, diagnosis = ?, tanggal_periksa= ? WHERE id_rekammedis= ?";
+            String sql = "UPDATE rekam_medis SET id_dokter= ?, id_pasien= ?, id_obat= ?,  gejala = ?, diagnosis = ?, tindakan= ?, tanggal_periksa= ? WHERE id_rekammedis= ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, idDokter);
             pstmt.setString(2, idPasien);
             pstmt.setString(3, idObat);
             pstmt.setString(4, gejala);
             pstmt.setString(5, diagnosis);
-            pstmt.setDate(6, sqlDate);
-            pstmt.setString(7, idRekam);
+            pstmt.setString(6, tindakan);
+            pstmt.setDate(7, sqlDate);
+            pstmt.setString(8, idRekam);
             pstmt.executeUpdate();
             pstmt.close();
 
@@ -547,10 +567,12 @@ public class rekammedis extends javax.swing.JFrame {
             String tanggal = tablepemeriksaan.getValueAt(row, 3).toString();
             String gejala = tablepemeriksaan.getValueAt(row, 4).toString();
             String diagnosis = tablepemeriksaan.getValueAt(row, 5).toString();
+            String tindakan = tablepemeriksaan.getValueAt(row, 6).toString();
 
             tidrekam.setText(idRekamMedis);
             tnamadokter.setText(namaDokter);
             tnama_pasien.setText(namaPasien);
+            cbtindakan.setSelectedItem(tindakan);
 
             try {
                 java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(tanggal);
@@ -632,8 +654,10 @@ public class rekammedis extends javax.swing.JFrame {
     private javax.swing.JButton bkembali;
     private javax.swing.JButton bperbarui;
     private javax.swing.JButton bsimpan;
+    private javax.swing.JComboBox<String> cbtindakan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
