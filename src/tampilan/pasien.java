@@ -24,7 +24,6 @@ public class pasien extends javax.swing.JFrame {
 
     private Connection conn = new koneksi().connect();
     private DefaultTableModel tabmode;
-    private JTable tableDokter;
 
     /**
      * Creates new form pasien
@@ -37,6 +36,7 @@ public class pasien extends javax.swing.JFrame {
 
     protected void kosong() {
         tid.setText("");
+        tnik.setText("");
         tnama.setText("");
         ttempat.setText("");
         tgl.setDate(null);
@@ -48,7 +48,7 @@ public class pasien extends javax.swing.JFrame {
     }
 
     protected void datatable() {
-        Object[] Baris = {"NIK", "Nama Pasien", "Tempat", "Tanggal Lahir", "Umur", "Jenis Kelamin", "Alamat", "No. HP"};
+        Object[] Baris = {"ID", "NIK", "Nama Pasien", "Tempat", "Tanggal Lahir", "Umur", "Jenis Kelamin", "Alamat", "No. HP"};
         tabmode = new DefaultTableModel(null, Baris);
         tablepasien.setModel(tabmode);
         String sql = "select * from pasien";
@@ -56,24 +56,22 @@ public class pasien extends javax.swing.JFrame {
             java.sql.Statement stat = conn.createStatement();
             ResultSet hasil = stat.executeQuery(sql);
             while (hasil.next()) {
-                String a = hasil.getString("no_id");
-                String b = hasil.getString("nama_pasien");
-                String c = hasil.getString("tempat_lahir");
-                String d = hasil.getString("tanggal_lahir");
-                String e = hasil.getString("umur");
-                String f = hasil.getString("jenis_kelamin");
-                String g = hasil.getString("alamat");
-                String h = hasil.getString("nohp");
+                String a = hasil.getString("id_pasien");
+                String b = hasil.getString("nik"); // Menambahkan pengambilan data NIK
+                String c = hasil.getString("nama_pasien");
+                String d = hasil.getString("tempat_lahir");
+                String e = hasil.getString("tanggal_lahir");
+                String f = hasil.getString("umur");
+                String g = hasil.getString("jenis_kelamin");
+                String h = hasil.getString("alamat");
+                String i = hasil.getString("nohp");
 
-                String[] data = {a, b, c, d, e, f, g, h};
+                String[] data = {a, b, c, d, e, f, g, h, i};
                 tabmode.addRow(data);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error accessing database: " + e.getMessage());
         }
-    }
-
-    public JTable getTablePasien() {
-        return tablepasien;
     }
 
     /**
@@ -93,7 +91,6 @@ public class pasien extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         tid = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
         tnama = new javax.swing.JTextField();
         ttempat = new javax.swing.JTextField();
         tgl = new com.toedter.calendar.JDateChooser();
@@ -108,6 +105,8 @@ public class pasien extends javax.swing.JFrame {
         bkembali = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablepasien = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        tnik = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pasien");
@@ -126,9 +125,6 @@ public class pasien extends javax.swing.JFrame {
         jLabel18.setText("Alamat");
 
         jLabel19.setText("Telp/HP");
-
-        jLabel20.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel20.setText("*Nik.Ktp/KK");
 
         jLabel1.setText("Tahun");
 
@@ -184,10 +180,16 @@ public class pasien extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tablepasien);
 
+        jLabel2.setText("NIK");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 762, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,17 +201,6 @@ public class pasien extends javax.swing.JFrame {
                         .addComponent(bhapus)
                         .addGap(18, 18, 18)
                         .addComponent(bkembali))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel14))
-                        .addGap(85, 85, 85)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tid, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(8, 8, 8)
-                                .addComponent(jLabel20))
-                            .addComponent(tnama, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
@@ -230,22 +221,31 @@ public class pasien extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(talamat, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(thp, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(thp, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(85, 85, 85)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tid, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tnama, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                            .addComponent(tnik))))
                 .addGap(92, 92, 92))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 762, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(tid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel20))
-                .addGap(20, 20, 20)
+                    .addComponent(tid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(tnik, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(tnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -279,7 +279,7 @@ public class pasien extends javax.swing.JFrame {
                     .addComponent(bkembali))
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         pack();
@@ -287,7 +287,8 @@ public class pasien extends javax.swing.JFrame {
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
         // TODO add your handling code here:
-        String nik = tid.getText();
+        String idpas = tid.getText();
+        String nik = tnik.getText();
         String nama_pasien = tnama.getText();
         String tempat = ttempat.getText();
         java.util.Date date = tgl.getDate();
@@ -299,21 +300,24 @@ public class pasien extends javax.swing.JFrame {
         String nohp = thp.getText();
 
         try {
-            String query = "INSERT INTO pasien (no_id, nama_pasien, tempat_lahir, tanggal_lahir, umur, jenis_kelamin, alamat, nohp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO pasien (id_pasien, nik, nama_pasien, tempat_lahir, tanggal_lahir, umur, jenis_kelamin, alamat, nohp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, nik);
-            stmt.setString(2, nama_pasien);
-            stmt.setString(3, tempat);
-            stmt.setString(4, tanggal);
-            stmt.setString(5, umur);
-            stmt.setString(6, jenis_kelamin);
-            stmt.setString(7, alamat);
-            stmt.setString(8, nohp);
+            stmt.setString(1, idpas); // ID Pasien
+            stmt.setString(2, nik); // NIK
+            stmt.setString(3, nama_pasien); // Nama Pasien
+            stmt.setString(4, tempat); // Tempat Lahir
+            stmt.setString(5, tanggal); // Tanggal Lahir
+            stmt.setString(6, umur); // Umur
+            stmt.setString(7, jenis_kelamin); // Jenis Kelamin
+            stmt.setString(8, alamat); // Alamat
+            stmt.setString(9, nohp); // No HP
 
-            datatable();
-            kosong();
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data pasien berhasil disimpan");
+            int result = stmt.executeUpdate(); // Menyimpan data ke database
+            if (result > 0) {
+                datatable(); // Memperbarui tampilan tabel
+                kosong(); // Mengosongkan form
+                JOptionPane.showMessageDialog(this, "Data pasien berhasil disimpan");
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -322,7 +326,8 @@ public class pasien extends javax.swing.JFrame {
 
     private void bperbaruiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bperbaruiActionPerformed
         // TODO add your handling code here:
-        String nik = tid.getText();
+        String idPasien = tid.getText();  // Asumsi tid adalah TextField untuk id_pasien
+        String nik = tnik.getText();  // TextField untuk nik
         String nama = tnama.getText();
         String tempatLahir = ttempat.getText();
         java.util.Date date = tgl.getDate();
@@ -332,17 +337,18 @@ public class pasien extends javax.swing.JFrame {
         String alamat = talamat.getText();
         String nohp = thp.getText();
 
-        String sql = "UPDATE pasien SET  nama_pasien = ?, tempat_lahir = ?, tanggal_lahir = ?, jenis_kelamin = ?, alamat = ?, nohp = ? WHERE no_id= ?";
+        String sql = "UPDATE pasien SET nik = ?, nama_pasien = ?, tempat_lahir = ?, tanggal_lahir = ?, jenis_kelamin = ?, alamat = ?, nohp = ? WHERE id_pasien = ?";
 
         try {
             PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, nama);
-            pst.setString(2, tempatLahir);
-            pst.setString(3, tanggalLahir);
-            pst.setString(4, jenisKelamin);
-            pst.setString(5, alamat);
-            pst.setString(6, nohp);
-            pst.setString(7, nik);
+            pst.setString(1, nik);
+            pst.setString(2, nama);
+            pst.setString(3, tempatLahir);
+            pst.setString(4, tanggalLahir);
+            pst.setString(5, jenisKelamin);
+            pst.setString(6, alamat);
+            pst.setString(7, nohp);
+            pst.setString(8, idPasien);
 
             pst.executeUpdate();
             datatable();
@@ -351,65 +357,70 @@ public class pasien extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Kesalahan database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_bperbaruiActionPerformed
 
     private void tablepasienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablepasienMouseClicked
         // TODO add your handling code here:
         int Bar = tablepasien.getSelectedRow();
-        String a = tabmode.getValueAt(Bar, 0).toString();
-        String b = tabmode.getValueAt(Bar, 1).toString();
-        String c = tabmode.getValueAt(Bar, 2).toString();
-        String d = tabmode.getValueAt(Bar, 3).toString();
-        String e = tabmode.getValueAt(Bar, 4).toString();
-        String f = tabmode.getValueAt(Bar, 5).toString();
-        String g = tabmode.getValueAt(Bar, 6).toString();
-        String h = tabmode.getValueAt(Bar, 7).toString();
+      // Ensures that a row is selected
+            String a = tabmode.getValueAt(Bar, 0).toString(); // ID Pasien
+            String b = tabmode.getValueAt(Bar, 1).toString(); // NIK
+            String c = tabmode.getValueAt(Bar, 2).toString(); // Nama Pasien
+            String d = tabmode.getValueAt(Bar, 3).toString(); // Tempat Lahir
+            String e = tabmode.getValueAt(Bar, 4).toString(); // Tanggal Lahir
+            String f = tabmode.getValueAt(Bar, 5).toString(); // Umur
+            String g = tabmode.getValueAt(Bar, 6).toString(); // Jenis Kelamin
+            String h = tabmode.getValueAt(Bar, 7).toString(); // Alamat
+            String i = tabmode.getValueAt(Bar, 8).toString(); // No. HP
 
-        tid.setText(a);
-        tnama.setText(b);
-        ttempat.setText(c);
-        tumur.setText(e);
-        cbJK.setToolTipText(f);
-        talamat.setText(g);
-        thp.setText(h);
+            tid.setText(a);
+            tnik.setText(b);  // Set NIK to the text field
+            tnama.setText(c);
+            ttempat.setText(d);
+            tumur.setText(f);
+            cbJK.setToolTipText(g); // This might need adjustment if cbJK is a JComboBox to display the selected item
+            talamat.setText(h);
+            thp.setText(i);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date tanggal = sdf.parse(d);
-            tgl.setDate(tanggal);
-        } catch (ParseException ex) {
-            JOptionPane.showMessageDialog(this, "Format tanggal salah: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            tgl.setDate(null);
-        }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                Date tanggal = sdf.parse(e);
+                tgl.setDate(tanggal);
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(this, "Format tanggal salah: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                tgl.setDate(null);
+            }
     }//GEN-LAST:event_tablepasienMouseClicked
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
         // TODO add your handling code here:
-       String nik = tid.getText();
+        String idPasien = tid.getText();  // Mengubah nama variabel untuk menghindari kebingungan
 
-    try {
-        String query = "DELETE FROM pasien WHERE no_id = ?";
-        PreparedStatement stmt = conn.prepareStatement(query);
-        stmt.setString(1, nik);
+        try {
+            String query = "DELETE FROM pasien WHERE id_pasien = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, idPasien);  // Menggunakan idPasien sebagai parameter query
 
-        int rowsAffected = stmt.executeUpdate();
-        if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(this, "Data Pasien berhasil dihapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-            kosong(); 
-            datatable(); 
-        } else {
-            JOptionPane.showMessageDialog(this, "Tidak ada data dengan no_id " + nik, "Error", JOptionPane.ERROR_MESSAGE);
+            int rowsAffected = stmt.executeUpdate();  // Eksekusi query
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(this, "Data Pasien berhasil dihapus", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+                kosong();  // Mengosongkan form
+                datatable();  // Memperbarui tampilan tabel
+            } else {
+                JOptionPane.showMessageDialog(this, "Tidak ada data dengan ID " + idPasien, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            stmt.close();  // Menutup statement setelah selesai
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        stmt.close();
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
+
     }//GEN-LAST:event_bhapusActionPerformed
 
     private void bkembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkembaliActionPerformed
         // TODO add your handling code here:
         new menu().setVisible(true);
-         dispose();
+        dispose();
     }//GEN-LAST:event_bkembaliActionPerformed
 
     /**
@@ -461,7 +472,7 @@ public class pasien extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablepasien;
     private javax.swing.JTextField talamat;
@@ -469,6 +480,7 @@ public class pasien extends javax.swing.JFrame {
     private javax.swing.JTextField thp;
     private javax.swing.JTextField tid;
     private javax.swing.JTextField tnama;
+    private javax.swing.JTextField tnik;
     private javax.swing.JTextField ttempat;
     private javax.swing.JTextField tumur;
     // End of variables declaration//GEN-END:variables

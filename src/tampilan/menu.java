@@ -13,12 +13,11 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 import koneksi.koneksi;
 import login.login;
-//import net.sf.jasperreports.engine.JasperFillManager;
-//import net.sf.jasperreports.engine.JasperPrint;
-//import net.sf.jasperreports.engine.JasperReport;
-//import net.sf.jasperreports.engine.util.JRLoader;
-//import net.sf.jasperreports.view.JasperViewer;
-
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -43,7 +42,7 @@ public class menu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         menubar = new javax.swing.JMenuBar();
         menu_home = new javax.swing.JMenu();
         menu_logout = new javax.swing.JMenuItem();
@@ -53,9 +52,9 @@ public class menu extends javax.swing.JFrame {
         menu_obat = new javax.swing.JMenuItem();
         menu_pelayanan = new javax.swing.JMenu();
         menu_pemeriksaan = new javax.swing.JMenuItem();
-        menu_resep = new javax.swing.JMenuItem();
+        menu_kamar = new javax.swing.JMenuItem();
+        menu_pembayaran = new javax.swing.JMenuItem();
         menu_laporan = new javax.swing.JMenu();
-        data_obat = new javax.swing.JMenuItem();
         data_dokter = new javax.swing.JMenuItem();
         data_pasien = new javax.swing.JMenuItem();
         data_pemeriksaan = new javax.swing.JMenuItem();
@@ -63,18 +62,21 @@ public class menu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/background.jpg"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/hospital.jpg"))); // NOI18N
+        jLabel2.setText("jLabel2");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 584, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -123,7 +125,7 @@ public class menu extends javax.swing.JFrame {
         menu_pelayanan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons8-person-24.png"))); // NOI18N
         menu_pelayanan.setText("Pelayanan");
 
-        menu_pemeriksaan.setText("Pemeriksaan");
+        menu_pemeriksaan.setText("Rekam Medis");
         menu_pemeriksaan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_pemeriksaanActionPerformed(evt);
@@ -131,26 +133,26 @@ public class menu extends javax.swing.JFrame {
         });
         menu_pelayanan.add(menu_pemeriksaan);
 
-        menu_resep.setText("Resep");
-        menu_resep.addActionListener(new java.awt.event.ActionListener() {
+        menu_kamar.setText("Kamar");
+        menu_kamar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_resepActionPerformed(evt);
+                menu_kamarActionPerformed(evt);
             }
         });
-        menu_pelayanan.add(menu_resep);
+        menu_pelayanan.add(menu_kamar);
+
+        menu_pembayaran.setText("Pembayaran");
+        menu_pembayaran.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menu_pembayaranActionPerformed(evt);
+            }
+        });
+        menu_pelayanan.add(menu_pembayaran);
 
         menubar.add(menu_pelayanan);
 
         menu_laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/icons8-print-24.png"))); // NOI18N
         menu_laporan.setText("Laporan");
-
-        data_obat.setText("Laporan Data Obat");
-        data_obat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                data_obatActionPerformed(evt);
-            }
-        });
-        menu_laporan.add(data_obat);
 
         data_dokter.setText("Laporan Data Dokter");
         menu_laporan.add(data_dokter);
@@ -158,10 +160,10 @@ public class menu extends javax.swing.JFrame {
         data_pasien.setText("Laporan Data Pasien");
         menu_laporan.add(data_pasien);
 
-        data_pemeriksaan.setText("Laporan Data Pemeriksaan");
+        data_pemeriksaan.setText("Laporan Data Rekam Medis");
         menu_laporan.add(data_pemeriksaan);
 
-        data_resep.setText("Laporan Data Resep");
+        data_resep.setText("Laporan Data Pembayaran");
         menu_laporan.add(data_resep);
 
         menubar.add(menu_laporan);
@@ -180,6 +182,7 @@ public class menu extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void menu_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_logoutActionPerformed
@@ -208,31 +211,21 @@ public class menu extends javax.swing.JFrame {
 
     private void menu_pemeriksaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_pemeriksaanActionPerformed
         // TODO add your handling code here:
-        new pemeriksaan().setVisible(true);
+        new rekammedis().setVisible(true);
         dispose();
     }//GEN-LAST:event_menu_pemeriksaanActionPerformed
 
-    private void menu_resepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_resepActionPerformed
+    private void menu_pembayaranActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_pembayaranActionPerformed
         // TODO add your handling code here:
-        new resep().setVisible(true);
+        new pembayaran().setVisible(true);
         dispose();
-    }//GEN-LAST:event_menu_resepActionPerformed
+    }//GEN-LAST:event_menu_pembayaranActionPerformed
 
-    private void data_obatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_obatActionPerformed
+    private void menu_kamarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_kamarActionPerformed
         // TODO add your handling code here:
-//      try { 
-//        String namaFile = "src/report/LaporanDataObat.jasper";
-//        Connection conn = new koneksi().connect();
-//        HashMap<String, Object> parameter = new HashMap<>();
-//        File report_file = new File(namaFile);
-//        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(report_file.getPath());
-//        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, conn);
-//        JasperViewer.viewReport(jasperPrint, false);
-//        JasperViewer.setDefaultLookAndFeelDecorated(true);
-//    } catch (Exception e) {
-//        JOptionPane.showMessageDialog(null, e.getMessage());
-//    }
-    }//GEN-LAST:event_data_obatActionPerformed
+        new kamar().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_menu_kamarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -271,22 +264,22 @@ public class menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem data_dokter;
-    private javax.swing.JMenuItem data_obat;
     private javax.swing.JMenuItem data_pasien;
     private javax.swing.JMenuItem data_pemeriksaan;
     private javax.swing.JMenuItem data_resep;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JMenuItem menu_dokter;
     private javax.swing.JMenu menu_home;
+    private javax.swing.JMenuItem menu_kamar;
     private javax.swing.JMenu menu_laporan;
     private javax.swing.JMenuItem menu_logout;
     private javax.swing.JMenu menu_master;
     private javax.swing.JMenuItem menu_obat;
     private javax.swing.JMenuItem menu_pasien;
     private javax.swing.JMenu menu_pelayanan;
+    private javax.swing.JMenuItem menu_pembayaran;
     private javax.swing.JMenuItem menu_pemeriksaan;
-    private javax.swing.JMenuItem menu_resep;
     private javax.swing.JMenuBar menubar;
     // End of variables declaration//GEN-END:variables
 }

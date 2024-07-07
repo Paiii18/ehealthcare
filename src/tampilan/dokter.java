@@ -4,7 +4,6 @@
  */
 package tampilan;
 
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.Connection;
@@ -12,6 +11,7 @@ import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,9 +27,6 @@ public class dokter extends javax.swing.JFrame {
 
     private Connection conn = new koneksi().connect();
     private DefaultTableModel tabmode;
-    private JTable tableDokter;
-    
-    
 
     /**
      * Creates new form dokter
@@ -37,62 +34,39 @@ public class dokter extends javax.swing.JFrame {
     public dokter() {
         initComponents();
         datatable();
-        generateKodeDokter();
     }
 
     protected void kosong() {
-        tkode.setText("");
         tnama.setText("");
+        tspesialis.setText("");
         thp.setText("");
-        generateKodeDokter();
-    }
-
-    public void generateKodeDokter() {
-        String sql = "SELECT MAX(RIGHT(kode_dokter, 3)) AS no FROM dokter";
-        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                String lastKode = rs.getString("no");
-                int nextId = 1;
-                if (lastKode != null) {
-                    nextId = Integer.parseInt(lastKode) + 1;
-                }
-                String generatedKode = String.format("DK%03d", nextId);
-                tkode.setText(generatedKode);
-            } else {
-                tkode.setText("DK001");
-            }
-        } catch (SQLException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(dokter.class.getName()).log(Level.SEVERE, null, e);
-        }
+        temail.setText("");
+        talamat.setText("");
     }
 
     protected void datatable() {
-        Object[] Baris = {"Kode Dokter", "Nama Dokter", "No HP/Telepon", "Email", "Alamat"};
+        Object[] Baris = {"ID Dokter", "Nama Dokter", "Spesialis", "No HP/Telepon", "Email", "Alamat"};
         tabmode = new DefaultTableModel(null, Baris);
         tabledokter.setModel(tabmode);
-        String sql = "select * from dokter";
-        try {
-            java.sql.Statement stat = conn.createStatement();
-            ResultSet hasil = stat.executeQuery(sql);
-            while (hasil.next()) {
-                String a = hasil.getString("kode_dokter");
-                String b = hasil.getString("nama_dokter");
-                String c = hasil.getString("nohp");
-                String d = hasil.getString("email");
-                String e = hasil.getString("alamat");
+        String sql = "SELECT * FROM dokter";
 
-                String[] data = {a, b, c, d, e};
+        try (Statement stat = conn.createStatement(); ResultSet hasil = stat.executeQuery(sql)) {
+            while (hasil.next()) {
+                String id = hasil.getString("id_dokter"); // Menambahkan pengambilan ID
+                String nama = hasil.getString("nama_dokter");
+                String spesialis = hasil.getString("spesialis");
+                String noHp = hasil.getString("nohp");
+                String email = hasil.getString("email");
+                String alamat = hasil.getString("alamat");
+
+                String[] data = {id, nama, spesialis, noHp, email, alamat}; // Menambahkan ID ke dalam data yang ditampilkan
                 tabmode.addRow(data);
+
             }
-            hasil.close();
-            stat.close();
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Kesalahan saat mengambil data: " + e.getMessage());
         }
-    }
-    
-    public JTable getTableDokter() {
-        return tabledokter;
+
     }
 
     /**
@@ -104,35 +78,40 @@ public class dokter extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        tkode = new javax.swing.JTextField();
         tnama = new javax.swing.JTextField();
         thp = new javax.swing.JTextField();
         bsimpan = new javax.swing.JButton();
         bkembali = new javax.swing.JButton();
         bhapus = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         temail = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         talamat = new javax.swing.JTextField();
         bperbarui = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabledokter = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        tiddokter = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        tspesialis = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dokter");
         setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel2.setText("Kode Dokter");
 
         jLabel3.setText("Nama Dokter");
 
         jLabel4.setText("Email");
 
         jLabel5.setText("Telp/HP");
+
+        thp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                thpActionPerformed(evt);
+            }
+        });
 
         bsimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/save.png"))); // NOI18N
         bsimpan.setText("Simpan");
@@ -157,9 +136,6 @@ public class dokter extends javax.swing.JFrame {
                 bhapusActionPerformed(evt);
             }
         });
-
-        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel1.setText("*kode otomatis");
 
         jLabel6.setText("Alamat");
 
@@ -189,31 +165,43 @@ public class dokter extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tabledokter);
 
+        jLabel7.setText("Id Dokter");
+
+        jLabel1.setText("Spesialis");
+
+        tspesialis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tspesialisActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(276, 276, 276)
+                        .addContainerGap(280, Short.MAX_VALUE)
                         .addComponent(bsimpan))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(tnama)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tkode, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel1))
-                            .addComponent(thp))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(tiddokter, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                                .addComponent(tnama, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(tspesialis, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -225,52 +213,56 @@ public class dokter extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(temail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(talamat))))
-                .addGap(39, 39, 39))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(thp, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(talamat)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(temail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE))))))
+                .addGap(32, 32, 32))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(tiddokter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(temail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(tkode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(14, 14, 14))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
+                            .addComponent(talamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(thp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bkembali)
+                            .addComponent(bhapus)
+                            .addComponent(bperbarui)
+                            .addComponent(bsimpan)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(tnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel4)
-                            .addComponent(temail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(tnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(talamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(thp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bsimpan)
-                    .addComponent(bkembali)
-                    .addComponent(bhapus)
-                    .addComponent(bperbarui))
+                            .addComponent(tspesialis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -279,98 +271,120 @@ public class dokter extends javax.swing.JFrame {
     private void bkembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkembaliActionPerformed
         // TODO add your handling code here:
         new menu().setVisible(true);
-         dispose();
+        dispose();
     }//GEN-LAST:event_bkembaliActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
         // TODO add your handling code here:
-        // Ambil nilai dari input fields
-        String iddokter = tkode.getText();
+        String iddokter = tiddokter.getText();
         String namadokter = tnama.getText();
+        String spesialis = tspesialis.getText();
         String notelp = thp.getText();
         String email = temail.getText();
         String alamat = talamat.getText();
+        
+        if (conn != null) {
+            try {
+                String query = "UPDATE dokter SET nama_dokter = ?, spesialis = ?, nohp = ?, email = ?, alamat = ? WHERE id_dokter = ?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, namadokter);
+                stmt.setString(2, spesialis);
+                stmt.setString(3, notelp);
+                stmt.setString(4, email);
+                stmt.setString(5, alamat);
+                stmt.setString(6, iddokter);
 
-        try {
-            String query = "INSERT INTO dokter (kode_dokter, nama_dokter, nohp, email, alamat) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, iddokter);
-            stmt.setString(2, namadokter);
-            stmt.setString(3, notelp);
-            stmt.setString(4, email);
-            stmt.setString(5, alamat);
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Data Dokter berhasil diupdate");
+                kosong();
+                datatable();
 
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data Dokter berhasil disimpan");
-            kosong(); // Kosongkan input fields dan panggil generateKodeDokter
-            datatable();
-
-            stmt.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                stmt.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Koneksi database belum diinisialisasi.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
         // TODO add your handling code here:\
-        int ok = JOptionPane.showConfirmDialog(null, "Hapus", "Konfirmasi Dialog", JOptionPane.YES_NO_OPTION);
-        if (ok == 0) {
-            String sql = "DELETE FROM dokter WHERE kode_dokter = '" + tkode.getText() + "'";
+        String iddokter = tiddokter.getText();
+
+        if (conn != null) {
             try {
-                PreparedStatement stat = conn.prepareStatement(sql);
-                stat.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Data berhasil dihapus");
-                kosong(); // Kosongkan input fields dan panggil generateKodeDokter
+                String query = "DELETE FROM dokter WHERE id_dokter = ?";
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, iddokter);
+
+                stmt.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Data Dokter berhasil dihapus");
+                kosong();
                 datatable();
-                stat.close();
+
+                stmt.close();
             } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Data gagal dihapus: " + e);
+                JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Koneksi database belum diinisialisasi.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_bhapusActionPerformed
 
     private void bperbaruiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bperbaruiActionPerformed
-        // TODO add your handling code here:
-        String iddokter = tkode.getText();
-        String namadokter = tnama.getText();
-        String notelp = thp.getText();
-        String email = temail.getText();
-        String alamat = talamat.getText();
-
         try {
-            String query = "UPDATE dokter SET nama_dokter=?, nohp=?, email=?, alamat=? WHERE kode_dokter=?";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, namadokter);
-            stmt.setString(2, notelp);
-            stmt.setString(3, email);
-            stmt.setString(4, alamat);
-            stmt.setString(5, iddokter);
+            int selectedRow = tabledokter.getSelectedRow(); // Mengambil baris yang dipilih
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Pilih baris yang akan diperbarui");
+                return;
+            }
 
-            stmt.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Data Dokter berhasil diperbarui");
-            kosong(); // Kosongkan input fields dan panggil generateKodeDokter
-            datatable();
-            stmt.close();
+            String id = tabledokter.getValueAt(selectedRow, 0).toString(); // Mengambil id dari baris yang dipilih
+
+            String sql = "UPDATE dokter SET nama_dokter=?, spesialis = ?, nohp=?, email=?, alamat=? WHERE id_dokter=?";
+            PreparedStatement stat = conn.prepareStatement(sql);
+
+            stat.setString(1, tnama.getText());
+            stat.setString(2, tspesialis.getText());
+            stat.setString(3, thp.getText());
+            stat.setString(4, temail.getText());
+            stat.setString(5, talamat.getText());
+            stat.setString(6, id); // ID diambil dari tabel
+
+            stat.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data berhasil diperbarui");
+            datatable(); // Memuat ulang data ke tabel
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Gagal memperbarui data: " + e.getMessage());
         }
     }//GEN-LAST:event_bperbaruiActionPerformed
 
     private void tabledokterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabledokterMouseClicked
         // TODO add your handling code here:
         int Bar = tabledokter.getSelectedRow();
-        String a = tabmode.getValueAt(Bar, 0).toString();
-        String b = tabmode.getValueAt(Bar, 1).toString();
-        String c = tabmode.getValueAt(Bar, 2).toString();
-        String d = tabmode.getValueAt(Bar, 3).toString();
-        String e = tabmode.getValueAt(Bar, 4).toString();
 
-        tkode.setText(a);
-        tnama.setText(b);
-        thp.setText(c);
-        temail.setText(d);
-        talamat.setText(e);
+        String id = tabmode.getValueAt(Bar, 0).toString();
+        String nama = tabmode.getValueAt(Bar, 1).toString();
+        String spesialis = tabmode.getValueAt(Bar, 2).toString();
+        String noHp = tabmode.getValueAt(Bar, 3).toString();
+        String email = tabmode.getValueAt(Bar, 4).toString();
+        String alamat = tabmode.getValueAt(Bar, 5).toString();
+
+        tnama.setText(nama);
+        tspesialis.setText(spesialis);
+        thp.setText(noHp);
+        temail.setText(email);
+        talamat.setText(alamat);
     }//GEN-LAST:event_tabledokterMouseClicked
+
+    private void tspesialisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tspesialisActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tspesialisActionPerformed
+
+    private void thpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_thpActionPerformed
 
     /**
      * @param args the command line arguments
@@ -413,17 +427,18 @@ public class dokter extends javax.swing.JFrame {
     private javax.swing.JButton bperbarui;
     private javax.swing.JButton bsimpan;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabledokter;
     private javax.swing.JTextField talamat;
     private javax.swing.JTextField temail;
     private javax.swing.JTextField thp;
-    private javax.swing.JTextField tkode;
+    private javax.swing.JTextField tiddokter;
     private javax.swing.JTextField tnama;
+    private javax.swing.JTextField tspesialis;
     // End of variables declaration//GEN-END:variables
 }

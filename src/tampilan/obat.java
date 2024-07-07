@@ -23,43 +23,21 @@ public class obat extends javax.swing.JFrame {
 
     private Connection conn = new koneksi().connect();
     private DefaultTableModel tabmode;
-     private JTable tableObat;
+  
 
     /**
      * Creates new form obat
      */
     public obat() {
         initComponents();
-        generateKodeObat();
         datatable();
     }
 
     protected void kosong() {
-        tkode_obat.setText("");
+        tidobat.setText("");
         tnama_obat.setText("");
         tharga.setText("");
         cbjenis.getSelectedItem();
-        generateKodeObat();
-    }
-
-    public void generateKodeObat() {
-        String sql = "SELECT MAX(RIGHT(kode_obat, 3)) AS no FROM obat";
-        try (PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                String lastKode = rs.getString("no");
-                int nextId = 1;
-                if (lastKode != null) {
-                    nextId = Integer.parseInt(lastKode) + 1;
-                }
-                String generatedKode = String.format("OBT%03d", nextId);
-                tkode_obat.setText(generatedKode);
-            } else {
-                tkode_obat.setText("OBT001");
-            }
-        } catch (SQLException | NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Kesalahan database: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(dokter.class.getName()).log(Level.SEVERE, null, e);
-        }
     }
 
     protected void datatable() {
@@ -71,7 +49,7 @@ public class obat extends javax.swing.JFrame {
             java.sql.Statement stat = conn.createStatement();
             ResultSet hasil = stat.executeQuery(sql);
             while (hasil.next()) {
-                String a = hasil.getString("kode_obat");
+                String a = hasil.getString("id_obat");
                 String b = hasil.getString("nama_obat");
                 String c = hasil.getString("jenis");
                 String d = hasil.getString("harga");
@@ -84,10 +62,7 @@ public class obat extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
-    
-    public JTable getTableObat() {
-        return tableobat;
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -98,7 +73,6 @@ public class obat extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         tnama_obat = new javax.swing.JTextField();
@@ -112,15 +86,15 @@ public class obat extends javax.swing.JFrame {
         tableobat = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         bperbarui = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        cbatur = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        tkode_obat = new javax.swing.JTextField();
+        tidobat = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Obat");
         setBackground(new java.awt.Color(255, 255, 255));
         setSize(new java.awt.Dimension(650, 500));
-
-        jLabel2.setText("Kode Obat");
 
         jLabel3.setText("Nama Obat");
 
@@ -182,8 +156,11 @@ public class obat extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel1.setText("*kode otomatis");
+        jLabel7.setText("Aturan Pakai");
+
+        cbatur.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "3x1 setelah makan", "3x1 sebelum makan" }));
+
+        jLabel1.setText("Id Obat");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -191,36 +168,43 @@ public class obat extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(bsimpan)
-                            .addGap(20, 20, 20)
-                            .addComponent(bhapus)
-                            .addGap(20, 20, 20)
-                            .addComponent(bperbarui)
-                            .addGap(20, 20, 20)
-                            .addComponent(bkembali)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2))
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(7, 7, 7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(tkode_obat, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel1)
-                                .addGap(37, 37, 37)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tharga, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(tnama_obat, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbjenis, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel1))
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(tnama_obat, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                    .addComponent(cbjenis, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tidobat)))
+                            .addComponent(bsimpan))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(bhapus)
+                                .addGap(20, 20, 20)
+                                .addComponent(bperbarui)
+                                .addGap(20, 20, 20)
+                                .addComponent(bkembali))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(67, 67, 67)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tharga, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(24, 24, 24)
+                                        .addComponent(cbatur, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -228,29 +212,35 @@ public class obat extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
                     .addComponent(jLabel5)
                     .addComponent(tharga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(jLabel1)
-                    .addComponent(tkode_obat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                    .addComponent(tidobat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tnama_obat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(cbjenis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bsimpan)
-                    .addComponent(bkembali)
-                    .addComponent(bhapus)
-                    .addComponent(bperbarui))
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(cbatur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bsimpan)
+                            .addComponent(bkembali)
+                            .addComponent(bhapus)
+                            .addComponent(bperbarui))
+                        .addGap(20, 20, 20)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tnama_obat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(cbjenis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -258,18 +248,20 @@ public class obat extends javax.swing.JFrame {
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
         // TODO add your handling code here:
-        String kode_obat = tkode_obat.getText();
+        String idobat = tidobat.getText();
         String nama_obat = tnama_obat.getText();
         String jenis = cbjenis.getSelectedItem().toString();
+        String pakai = cbatur.getSelectedItem().toString();
         int harga = Integer.parseInt(tharga.getText());
 
         try {
-            String query = "INSERT INTO obat(kode_obat, nama_obat, jenis, harga) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO obat(id_obat, nama_obat, jenis, pemakaian, harga) VALUES (?,?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, kode_obat);
+            stmt.setString(1, idobat);
             stmt.setString(2, nama_obat);
             stmt.setString(3, jenis);
-            stmt.setInt(4, harga);
+            stmt.setString(4, pakai);
+            stmt.setInt(5, harga);
 
             stmt.executeUpdate();
             datatable();
@@ -283,11 +275,11 @@ public class obat extends javax.swing.JFrame {
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
         // TODO add your handling code here:
-        String kode_obat = tkode_obat.getText();
+        String idobat = tidobat.getText();
         try {
-            String query = "DELETE FROM obat WHERE kode_obat = ?";
+            String query = "DELETE FROM obat WHERE id_obat= ?";
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, kode_obat);
+            stmt.setString(1, idobat);
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -295,7 +287,7 @@ public class obat extends javax.swing.JFrame {
                 datatable(); // Memperbarui tampilan tabel setelah penghapusan
                 kosong(); // Mengosongkan input fields
             } else {
-                JOptionPane.showMessageDialog(this, "Data obat dengan kode " + kode_obat + " tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Data obat dengan kode " + idobat + " tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
             }
             stmt.close();
         } catch (SQLException e) {
@@ -306,12 +298,12 @@ public class obat extends javax.swing.JFrame {
     private void bkembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkembaliActionPerformed
         // TODO add your handling code here:
         new menu().setVisible(true);
-         dispose();
+        dispose();
     }//GEN-LAST:event_bkembaliActionPerformed
 
     private void bperbaruiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bperbaruiActionPerformed
         // TODO add your handling code here:
-        String kode_obat = tkode_obat.getText();
+        String idobat = tidobat.getText();
         String nama_obat = tnama_obat.getText();
         String jenis = cbjenis.getSelectedItem().toString();
         int harga = Integer.parseInt(tharga.getText());
@@ -322,9 +314,10 @@ public class obat extends javax.swing.JFrame {
             stmt.setString(1, nama_obat);
             stmt.setString(2, jenis);
             stmt.setInt(3, harga);
-            stmt.setString(4, kode_obat);
+            stmt.setString(4, idobat);
 
             stmt.executeUpdate();
+            datatable();
             kosong();
             JOptionPane.showMessageDialog(this, "Data obat berhasil diperbarui");
         } catch (SQLException e) {
@@ -340,7 +333,7 @@ public class obat extends javax.swing.JFrame {
         String c = tabmode.getValueAt(Bar, 2).toString();
         String d = tabmode.getValueAt(Bar, 3).toString();
 
-        tkode_obat.setText(a);
+        tidobat.setText(a);
         tnama_obat.setText(b);
         cbjenis.setToolTipText(c);
         tharga.setText(d);
@@ -387,17 +380,18 @@ public class obat extends javax.swing.JFrame {
     private javax.swing.JButton bkembali;
     private javax.swing.JButton bperbarui;
     private javax.swing.JButton bsimpan;
+    private javax.swing.JComboBox<String> cbatur;
     private javax.swing.JComboBox<String> cbjenis;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableobat;
     private javax.swing.JTextField tharga;
-    private javax.swing.JTextField tkode_obat;
+    private javax.swing.JTextField tidobat;
     private javax.swing.JTextField tnama_obat;
     // End of variables declaration//GEN-END:variables
 }
