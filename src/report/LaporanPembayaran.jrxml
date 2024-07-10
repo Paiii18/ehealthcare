@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a11620f7-6c23-4ebf-851c-4469d5f3ab79">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+    pb.id_pembayaran, 
+    pb.tanggal_masuk, 
+    pb.harga_kamar, 
+    pb.total_harga, 
+    pb.tanggal_pembayaran, 
+    rm.id_rekammedis, 
+    ps.nama_pasien, 
+    km.nama_kamar 
+FROM 
+    pembayaran pb 
+    JOIN rekam_medis rm ON pb.id_rekammedis = rm.id_rekammedis 
+    JOIN pasien ps ON rm.id_pasien = ps.id_pasien 
+    JOIN kamar km ON pb.id_kamar = km.id_kamar;]]>
+	</queryString>
+	<field name="id_pembayaran" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tanggal_masuk" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="harga_kamar" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_harga" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tanggal_pembayaran" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_rekammedis" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama_pasien" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama_kamar" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="rowNumber" class="java.lang.Integer" calculation="Count"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="128" splitType="Stretch">
+			<image>
+				<reportElement x="130" y="12" width="100" height="100" uuid="791cfc7f-a805-41f9-ba1a-396b4a711963"/>
+				<imageExpression><![CDATA["C:\\Users\\Asus\\Documents\\NetBeansProjects\\apotik\\src\\assets\\background.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="274" y="60" width="351" height="40" uuid="f5e677ed-3243-4f26-ab51-78ee015625f9"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Jl. Raden Saleh No.42, Sukmajaya, Kec. Sukmajaya, Kota Depok, Jawa Barat 16412]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="327" y="29" width="244" height="20" uuid="bddf4378-6035-4bce-adf8-178d442b1686"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rumah Sakit  Hasanah Graha Afiah]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="94" splitType="Stretch">
+			<staticText>
+				<reportElement x="576" y="66" width="44" height="20" uuid="18435385-5ff6-4519-99d4-35011979fc1e"/>
+				<text><![CDATA[Tanggal :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="274" y="11" width="247" height="35" uuid="9f4ba3f9-65da-4b5d-b5d6-fce143f86990"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Laporan Pembayaran]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="620" y="66" width="100" height="20" uuid="d86c6296-efed-4c27-b0a9-77c3dd6bc7bb"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="77" y="0" width="23" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="7e4a98cc-1fa4-4655-a506-4cef79795dac"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="100" y="0" width="100" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="b30edd57-abb7-48f1-96cd-400197cf5af9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tanggal Masuk]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="200" y="0" width="100" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="887ed26f-bdf2-4a71-b921-dcb1ba1c5c42"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Harga Kamar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="300" y="0" width="100" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="dfd9aa88-22b3-4c4e-bd75-d2fbbd0cbec7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Total Harga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="400" y="0" width="100" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="0bf38046-0815-4445-a41e-fa81d2a3b531"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tanggal Pembayaran]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="501" y="0" width="100" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="c1ef9e37-718f-427e-8098-955c24eb62b4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nama Pasien]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="601" y="0" width="100" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="d98af1ad-cb3b-4884-a8e0-83ffbb7db6f6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nama Kamar]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="9435ebfd-e623-4600-b267-d888559f895a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tanggal_masuk}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="20" uuid="bbf5b0ce-6463-462d-9250-ec94375cd066"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{harga_kamar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="100" height="20" uuid="c61deeee-27af-4aaf-986a-8842d40108b4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{total_harga}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="100" height="20" uuid="6a65373d-1424-4891-92e6-421684b4d868"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tanggal_pembayaran}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="501" y="0" width="100" height="20" uuid="38fbc4ed-edef-41b3-af93-57ad05add4ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nama_pasien}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="601" y="0" width="100" height="20" uuid="5ad16693-0f73-454b-8b4e-ccb24e809f64"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nama_kamar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="77" y="0" width="23" height="20" uuid="c488d521-c181-4b7f-a83d-8d5ba570ae04"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{rowNumber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="99" splitType="Stretch">
+			<staticText>
+				<reportElement x="591" y="14" width="100" height="20" uuid="ac39215a-0cf1-42da-9514-4859f9864c30"/>
+				<text><![CDATA[Kepala Rumah Sakit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="581" y="79" width="120" height="20" uuid="79035dd3-e453-499e-8ef7-ef57ef8293c6"/>
+				<textElement textAlignment="Justified">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dr. Muhammad Singgih]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="34" width="100" height="20" uuid="251f6947-2756-41b7-a88c-471eb981318b"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

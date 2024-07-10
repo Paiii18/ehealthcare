@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5cdf2826-c1e9-4594-8a5c-c7e3fc15c578">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT rekam_medis.id_rekammedis, 
+       dokter.nama_dokter, 
+       pasien.nama_pasien, 
+       rekam_medis.tanggal_periksa, 
+       rekam_medis.gejala, 
+       rekam_medis.diagnosis, 
+       rekam_medis.tindakan 
+FROM rekam_medis 
+JOIN dokter ON rekam_medis.id_dokter = dokter.id_dokter 
+JOIN pasien ON rekam_medis.id_pasien = pasien.id_pasien;]]>
+	</queryString>
+	<field name="id_rekammedis" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama_dokter" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama_pasien" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tanggal_periksa" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gejala" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="diagnosis" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tindakan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="rowNumber" class="java.lang.Integer" calculation="Count"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="139" splitType="Stretch">
+			<image>
+				<reportElement x="114" y="12" width="100" height="100" uuid="20d52afb-6f03-4e3f-9b05-10a1db3ba61f"/>
+				<imageExpression><![CDATA["C:\\Users\\Asus\\Documents\\NetBeansProjects\\apotik\\src\\assets\\background.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="258" y="60" width="351" height="40" uuid="ce61cb49-ecf7-46ae-a6bf-8730509bae5d"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Jl. Raden Saleh No.42, Sukmajaya, Kec. Sukmajaya, Kota Depok, Jawa Barat 16412]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="311" y="29" width="244" height="20" uuid="6b8b510b-c598-43be-88b2-cdee75276c61"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rumah Sakit  Hasanah Graha Afiah]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="77" splitType="Stretch">
+			<staticText>
+				<reportElement x="590" y="55" width="44" height="20" uuid="b633f154-0ed8-49dd-85db-df4a70aff241"/>
+				<text><![CDATA[Tanggal :]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement x="634" y="55" width="100" height="20" uuid="4280a1ba-2f88-4093-8b00-7f72b44c1465"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="288" y="0" width="247" height="35" uuid="84fc8658-e1c6-47a2-8b54-e22bcff08dbd"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Laporan Rekam Medis]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="38" y="0" width="41" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="6a6b98f5-023c-42d2-9d0e-6767d27d13d8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="79" y="0" width="114" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="70c16fa0-7935-4a1d-bb46-5d6b3125da1c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nama Dokter]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="193" y="0" width="114" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="53e2878c-fe4b-4686-a25a-5ffe32eb516b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nama Pasien]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="307" y="0" width="114" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="6afb5388-0d3d-45e6-92f7-023012de8459"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tanggal Periksa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="421" y="0" width="114" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="b070353c-6ff8-4be7-a1ba-f314911b6d80"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Gejala]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="535" y="0" width="114" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="dbfebfb7-b9a5-44aa-81d4-a9d8e240821b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Diagnosis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="649" y="0" width="114" height="20" forecolor="#CCCCCC" backcolor="#333333" uuid="dff445c5-1f4e-418c-bd7b-0b8b9a0df54b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tindakan]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="79" y="0" width="114" height="20" uuid="d5da301b-e106-45bb-820b-80c66f3bc9ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nama_dokter}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="193" y="0" width="114" height="20" uuid="f9156946-68b2-49de-8086-63c184a37770"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nama_pasien}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="307" y="0" width="114" height="20" uuid="364affaf-b8d8-4645-8609-a532aa3a1c68"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tanggal_periksa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="421" y="0" width="114" height="20" uuid="aaef7202-3111-4f75-a7ce-773af6734ed2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{gejala}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="535" y="0" width="114" height="20" uuid="44caeef1-ec98-4f7a-885d-9c4e418cc5bd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{diagnosis}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="649" y="0" width="114" height="20" uuid="496968bf-b292-467e-aa50-a5fd68dbd610"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tindakan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="38" y="0" width="41" height="20" uuid="ac095e75-4648-4f98-87b5-6b3143b65a51"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="76" splitType="Stretch">
+			<staticText>
+				<reportElement x="624" y="53" width="120" height="20" uuid="efd8fd77-d6b6-4cc4-b2c0-64b5283a0b46"/>
+				<textElement textAlignment="Justified">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dr. Muhammad Singgih]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="634" y="0" width="100" height="20" uuid="bcbccd9f-f352-4daf-9a21-52f977ea9719"/>
+				<text><![CDATA[Kepala Rumah Sakit]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="34" width="100" height="20" uuid="a3020982-a6f8-4bdc-a409-31b0d0eb9304"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

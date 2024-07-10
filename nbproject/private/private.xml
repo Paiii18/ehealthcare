@@ -3,18 +3,29 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/cari/cariRekam.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/kamar.java</file>
             <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/background/background.java</file>
-            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/cari/cariPasien.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/report/LaporanPembayaran.jrxml</file>
             <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/dokter.java</file>
             <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/login/login.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/koneksi/koneksi.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/report/LaporanRekam.jrxml</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/obat.java</file>
             <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/cari/cariBayar.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/menu.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/pembayaran.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/assets/header.jpg</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/cari/cariRekam.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/cari/cariPasien.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/report/LaporanPasien.jrxml</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/report/LaporanDokter.jrxml</file>
             <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/pasien.java</file>
             <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/build.xml</file>
-            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/menu.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/assets/background.jpg</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/assets/hospital.jpg</file>
             <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/cari/cariDokter.java</file>
             <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/cari/cariObat.java</file>
-            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/pembayaran.java</file>
+            <file>file:/C:/Users/Asus/Documents/NetBeansProjects/apotik/src/tampilan/rekammedis.java</file>
         </group>
     </open-files>
 </project-private>

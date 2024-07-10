@@ -4,9 +4,7 @@
  */
 package tampilan;
 
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.view.JasperViewer;
+
 import java.io.File;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -155,15 +153,35 @@ public class menu extends javax.swing.JFrame {
         menu_laporan.setText("Laporan");
 
         data_dokter.setText("Laporan Data Dokter");
+        data_dokter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                data_dokterActionPerformed(evt);
+            }
+        });
         menu_laporan.add(data_dokter);
 
         data_pasien.setText("Laporan Data Pasien");
+        data_pasien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                data_pasienActionPerformed(evt);
+            }
+        });
         menu_laporan.add(data_pasien);
 
         data_pemeriksaan.setText("Laporan Data Rekam Medis");
+        data_pemeriksaan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                data_pemeriksaanActionPerformed(evt);
+            }
+        });
         menu_laporan.add(data_pemeriksaan);
 
         data_resep.setText("Laporan Data Pembayaran");
+        data_resep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                data_resepActionPerformed(evt);
+            }
+        });
         menu_laporan.add(data_resep);
 
         menubar.add(menu_laporan);
@@ -226,6 +244,78 @@ public class menu extends javax.swing.JFrame {
         new kamar().setVisible(true);
         dispose();
     }//GEN-LAST:event_menu_kamarActionPerformed
+
+    private void data_pasienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_pasienActionPerformed
+        // TODO add your handling code here:
+         try {
+            String namaFile = "src/report/LaporanPasien.jasper";
+            Connection conn = new koneksi().connect();
+            HashMap<String, Object> parameter = new HashMap<>();
+            parameter.put("logoPath", "src/images/logo.png");// Path ke gambar
+
+            File report_file = new File(namaFile);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(report_file);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, conn);
+            JasperViewer.viewReport(jasperPrint, false);
+            JasperViewer.setDefaultLookAndFeelDecorated(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_data_pasienActionPerformed
+
+    private void data_dokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_dokterActionPerformed
+        // TODO add your handling code here:
+         try {
+            String namaFile = "src/report/LaporanDokter.jasper";
+            Connection conn = new koneksi().connect();
+            HashMap<String, Object> parameter = new HashMap<>();
+            parameter.put("logoPath", "src/images/logo.png");// Path ke gambar
+
+            File report_file = new File(namaFile);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(report_file);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, conn);
+            JasperViewer.viewReport(jasperPrint, false);
+            JasperViewer.setDefaultLookAndFeelDecorated(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_data_dokterActionPerformed
+
+    private void data_pemeriksaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_pemeriksaanActionPerformed
+        // TODO add your handling code here:
+          try {
+            String namaFile = "src/report/LaporanRekam.jasper";
+            Connection conn = new koneksi().connect();
+            HashMap<String, Object> parameter = new HashMap<>();
+            parameter.put("logoPath", "src/images/logo.png");// Path ke gambar
+
+            File report_file = new File(namaFile);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(report_file);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, conn);
+            JasperViewer.viewReport(jasperPrint, false);
+            JasperViewer.setDefaultLookAndFeelDecorated(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_data_pemeriksaanActionPerformed
+
+    private void data_resepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_data_resepActionPerformed
+        // TODO add your handling code here:
+          try {
+            String namaFile = "src/report/LaporanPembayaran.jasper";
+            Connection conn = new koneksi().connect();
+            HashMap<String, Object> parameter = new HashMap<>();
+            parameter.put("logoPath", "src/images/logo.png");// Path ke gambar
+
+            File report_file = new File(namaFile);
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(report_file);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameter, conn);
+            JasperViewer.viewReport(jasperPrint, false);
+            JasperViewer.setDefaultLookAndFeelDecorated(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_data_resepActionPerformed
 
     /**
      * @param args the command line arguments

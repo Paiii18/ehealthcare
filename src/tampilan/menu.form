@@ -102,21 +102,33 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Laporan Data Dokter"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="data_dokterActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="data_pasien">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Laporan Data Pasien"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="data_pasienActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="data_pemeriksaan">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Laporan Data Rekam Medis"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="data_pemeriksaanActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="data_resep">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Laporan Data Pembayaran"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="data_resepActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

@@ -6,7 +6,11 @@ package tampilan;
 
 import cari.cariBayar;
 import cari.cariRekam;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
 
@@ -18,7 +22,7 @@ public class pembayaran extends javax.swing.JFrame {
 
     private Connection conn = new koneksi().connect();
     private DefaultTableModel tabmode;
-    public String namaPas,namaDok, namaObat, diagnosis, tanggal, namaKamar, hargaObat, hargaKamar;
+    public String namaPas, namaDok, namaObat, diagnosis, tanggal, namaKamar, hargaObat, hargaKamar;
 
     public java.util.Date tanggalmasuk;
 
@@ -45,7 +49,7 @@ public class pembayaran extends javax.swing.JFrame {
     public String getNamaDiagnosis() {
         return diagnosis;
     }
-    
+
     public String getHargaObat() {
         return hargaObat;
     }
@@ -59,6 +63,14 @@ public class pembayaran extends javax.swing.JFrame {
      */
     public pembayaran() {
         initComponents();
+        setLocationRelativeTo(null);
+
+        // Event listener untuk menghitung total harga saat input lama inap berubah
+        tlama.addKeyListener(new KeyAdapter() {
+            public void keyReleased(KeyEvent e) {
+                calculateTotalHarga();
+            }
+        });
     }
 
     public void bayarTerpilih() {
@@ -72,6 +84,20 @@ public class pembayaran extends javax.swing.JFrame {
         tnamaobat.setText(namaObat);
         thargakamar.setText(hargaKamar);
         thargaobat.setText(hargaObat);
+        calculateTotalHarga();
+    }
+
+    private void calculateTotalHarga() {
+        try {
+            int hargaKamar = Integer.parseInt(thargakamar.getText());
+            int hargaObat = Integer.parseInt(thargaobat.getText());
+            int lamaInap = Integer.parseInt(tlama.getText());
+
+            int totalHarga = (hargaKamar * lamaInap) + hargaObat;
+            ttotal.setText(String.valueOf(totalHarga));
+        } catch (NumberFormatException e) {
+            ttotal.setText("0");
+        }
     }
 
     /**
@@ -105,8 +131,8 @@ public class pembayaran extends javax.swing.JFrame {
         tlama = new javax.swing.JTextField();
         tanggal_masuk = new com.toedter.calendar.JDateChooser();
         tanggalbayar = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        bkembali = new javax.swing.JButton();
+        bsimpan = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -139,9 +165,19 @@ public class pembayaran extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Kembali");
+        bkembali.setText("Kembali");
+        bkembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bkembaliActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Simpan");
+        bsimpan.setText("Simpan");
+        bsimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bsimpanActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cari");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -195,9 +231,9 @@ public class pembayaran extends javax.swing.JFrame {
                                         .addComponent(tlama, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(ttotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButton2)
+                                        .addComponent(bsimpan)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton1)))))
+                                        .addComponent(bkembali)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3)))
                 .addGap(0, 261, Short.MAX_VALUE))
@@ -262,12 +298,13 @@ public class pembayaran extends javax.swing.JFrame {
                     .addComponent(tanggal_masuk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(bsimpan)
+                    .addComponent(bkembali))
                 .addGap(29, 29, 29))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void thargakamarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thargakamarActionPerformed
@@ -283,6 +320,67 @@ public class pembayaran extends javax.swing.JFrame {
 //        tiddokter.setEnabled(false);
         tnamadokter.setEnabled(false);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
+        // TODO add your handling code here:
+        try {
+            int hargaKamar = Integer.parseInt(thargakamar.getText());
+            int hargaObat = Integer.parseInt(thargaobat.getText());
+            int lamaInap = Integer.parseInt(tlama.getText());
+            int totalHarga = Integer.parseInt(ttotal.getText());
+
+            // Deklarasikan variabel idRekamMedis dan idKamar
+            int idRekamMedis = 0;
+            int idKamar = 0;
+
+            // Query untuk mendapatkan id_rekammedis berdasarkan nama_pasien
+            String sqlRekamMedis = "SELECT rm.id_rekammedis FROM rekam_medis rm "
+                    + "INNER JOIN pasien ps ON rm.id_pasien = ps.id_pasien "
+                    + "WHERE ps.nama_pasien = ?";
+            java.sql.PreparedStatement pstRekamMedis = conn.prepareStatement(sqlRekamMedis);
+            pstRekamMedis.setString(1, namaPas);
+            ResultSet rsRekamMedis = pstRekamMedis.executeQuery();
+            if (rsRekamMedis.next()) {
+                idRekamMedis = rsRekamMedis.getInt("id_rekammedis");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data rekam medis tidak ditemukan");
+                return;
+            }
+
+            // Query untuk mendapatkan id_kamar berdasarkan nama_kamar
+            String sqlKamar = "SELECT id_kamar FROM kamar WHERE nama_kamar = ?";
+            java.sql.PreparedStatement pstKamar = conn.prepareStatement(sqlKamar);
+            pstKamar.setString(1, namaKamar);
+            ResultSet rsKamar = pstKamar.executeQuery();
+            if (rsKamar.next()) {
+                idKamar = rsKamar.getInt("id_kamar");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data kamar tidak ditemukan");
+                return;
+            }
+
+            // Simpan data ke database
+            String sql = "INSERT INTO pembayaran (id_rekammedis, tanggal_masuk, id_kamar, harga_kamar, total_harga, tanggal_pembayaran) VALUES ( ?, ?, ?, ?, ?, ?)";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, idRekamMedis);
+            pst.setDate(2, new java.sql.Date(tanggalmasuk.getTime()));
+            pst.setInt(3, idKamar);
+            pst.setInt(4, hargaKamar);
+            pst.setInt(5, totalHarga);
+            pst.setDate(6, new java.sql.Date(System.currentTimeMillis())); // Tanggal pembayaran saat ini
+
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_bsimpanActionPerformed
+
+    private void bkembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkembaliActionPerformed
+        // TODO add your handling code here:
+        new menu().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_bkembaliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -320,8 +418,8 @@ public class pembayaran extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton bkembali;
+    private javax.swing.JButton bsimpan;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
